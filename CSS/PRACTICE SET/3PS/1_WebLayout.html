@@ -1,0 +1,55 @@
+<!-- CREATE A WEBSITE LAYOUT, ADD A HEADER BOX,1 CONTENT BOX AND ONE FOOTER  -->
+<!-- ADD BORDERS AND MARGINS TO ABOVE -->
+<!-- DOES THE MARGIN COLLAPSE BETWEEN CONTENT BOX AND FOOTER -->
+<!-- ADD THE BOX SIZING PROPERTY TO CONTENT BOX , WHAT CHANGES DID YOU NOTICE? -->
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <title>Web Layout</title>
+     <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: content-box ;
+        }
+        header{
+            border: 2px solid red;
+            margin: 2px;
+            height: 66px;
+            background: black;
+            color: white;
+        }
+        .content {
+            border: 2px dashed black;
+            margin: 34px;
+            padding: 33px;
+            background-color: rgb(222, 255, 160);
+            height: 90vh;
+        }
+        footer{
+            border: 5px double navy;
+            margin: 23px;
+            background-color: rgb(214, 165, 230);
+            color: black;
+        }
+        .center{
+            text-align: center; 
+        }
+     </style>
+ </head>
+ <body>
+    <header>
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </header>
+    <div class="content">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi officiis dolore minus nesciunt quo quibusdam aperiam odit ad ut qui, ducimus voluptas perferendis quos numquam dolores esse architecto, iste at reiciendis quas, aliquam error!
+    </div>
+    <footer>
+        <p class="center" >Copyright sportsmania007 &copy;</p>
+    </footer>
+ </body>
+ </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Margin collapse</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box1{
+            background-color: lightcoral;
+            height: 220px;
+            width: 233px;
+            border: 2px solid blue;
+        }
+        .box2{
+            background-color: lightskyblue;
+            height: 20px;
+            width: 100%;
+            padding: 6px;
+            border: 5px solid black;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus aspernatur aperiam porro perspiciatis commodi excepturi doloremque deserunt delectus optio sit sint ullam voluptates, nihil ea ipsam magnam nemo! Molestiae iusto perferendis eos quos ad.</p>
+        <div class="box2">
+        </div>
+    </div>
+</body>
+</html>

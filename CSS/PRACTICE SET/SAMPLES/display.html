@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display</title>
+    <style>
+        .box{
+            display: block;
+            width: 80%;
+            margin: 0;
+        }
+        span{
+            display: inline;
+            /* width: 200px; no effect*/
+            /* height: 50px; no effect*/
+            /* margin-top: auto; no effect */
+            margin-left:auto;
+            margin-right: auto;
+        }
+        .abc{
+            display: inline-block;
+            width: 140px;
+            height: 50px;
+            padding: 8px,4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Display property</h1>
+    <ul>
+        <li>Block</li>
+        <li>Inline</li>
+        <li>Inline Block</li>
+    </ul>
+    <h2>What is display</h2>
+    <ul>
+        <li>element generates block/inline box</li>
+        <li>starts on newline/flow with text</li>
+        width,height,margin and layout
+    </ul>
+    <div class="box">
+    <h2>Block</h2>
+    <ul>
+        <li>takes full available width</li>
+        <li>starts own new line</li>
+        <li>respects al model props</li>
+        <li>ex: div,p,h1-h6,section</li>
+    </ul>
+    </div>
+    <h2>Inline</h2>
+    <ul>
+        <li>Sticks to content width only</li>
+        <li>flows within surronding text</li>
+        <li>ignores width,height,top/bottom margin,padding</li>
+        <li>ex: span,a,strong,em</li>
+    </ul>
+    <div class="abc">
+    <h2>Inline-Block</h2>
+    <ul>
+        <li>flows inline like text</li>
+        <li>but respects with width and height</li>
+        <li>top/bottom margin,padding</li>
+        <li>ex: span</li>
+    </ul>
+    <h2>divison block</h2>
+    <ul>
+        <li>flows in a division</li>
+        <li>but respects with width and height</li>
+        <li>top/bottom margin,padding</li>
+        <li>ex: span</li>
+    </ul>
+    </div>
+    
+</body>
+</html>

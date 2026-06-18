@@ -1,0 +1,212 @@
+<!--Create an HTML form for a travel webiste to book a vacation-->
+<!-- WITH TABLE -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Travel Form</title>
+</head>
+<body>
+    <fieldset style="width:400px; margin:auto;">
+        <legend align="center">
+            <h1><i>Travel Form</i></h1>
+        </legend>
+
+        <table align="center">
+
+            <tr>
+                <th colspan="2" align="left" style="background-color:cornflowerblue;">Personal Details:</th>
+            </tr>
+            <div>
+                <tr>
+                    <td>
+                        <li><label for="fullname">Full Name:</label></li>
+                    </td>
+
+                    <td><input type="text" style="width:200px;" name="fullname" id="fullname"
+                            placeholder="Enter your Name">
+                    </td>
+                </tr>
+            </div>
+            <tr>
+                <td>
+                    <li><label for="age">Age:</label></li>
+                </td>
+                <td><input type="number" style="width:200px;" name="age" id="age" placeholder="Enter your age"></td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="gender">Gender:</label></li>
+                </td>
+                <td><input type="radio" name="gender" id="m">
+                    <label for="m">Male</label>
+                    <input type="radio" name="gender" id="f">
+                    <label for="f">Female</label>
+                    <input type="radio" name="gender" id="o">
+                    <label for="o">Other</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="email">Email:</label></li>
+                </td>
+                <td><input type="text" style="width:200px;" name="email" id="email"
+                        placeholder="Enter your email address">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="phone">Phone:</label></li>
+                </td>
+                <td><input type="text" style="width:200px;" name="phone" id="phone"
+                        placeholder="Enter your phone number">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" align="left">Trip Details:</th>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="Destination">Destination:</label></li>
+                </td>
+                <td><select name="destination" style="width: 207px;">
+                        <option value="" selected disabled hidden>Select Destination</option>
+                        <option>Goa</option>
+                        <option>Manali</option>
+                        <option>Jaipur</option>
+                        <option>Shimla</option>
+                        <option>Udaipur</option>
+                        <option>Kashmir</option>
+                        <option>Leh-Ladakh</option>
+                        <option>Kerala</option>
+                        <option>Agra</option>
+                        <option>Amritsar</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="date">Departure Date:</label></li>
+                </td>
+                <td><input type="date" style="width:202px;" name="date" id="date">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="date2">Return Date:</label></li>
+                </td>
+                <td><input type="date" style="width:202px;" name="date2" id="date2">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="person">Person:</label></li>
+                </td>
+                <td><input type="number" style="width:200px;" name="person" id="person"
+                        placeholder="Enter number of person"></td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="mode">Travel Mode:</label></li>
+                </td>
+                <td><input type="radio" name="mode" id="fl">
+                    <label for="fl">Flight</label>
+                    <input type="radio" name="mode" id="t">
+                    <label for="t">Train</label>
+                    <input type="radio" name="mode" id="b">
+                    <label for="b">Bus</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" align="left">Stay Details:</th>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="type">Hotel Type:</label></li>
+                </td>
+                <td><select name="type" style="width: 207px;">
+                        <option value="" selected disabled hidden>Select Type</option>
+                        <option>3-Star</option>
+                        <option>4-Star</option>
+                        <option>5-Star</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="rooms">Rooms:</label></li>
+                </td>
+                <td>
+                    <input type="number" style="width:200px;" name="rooms" id="rooms"
+                        placeholder="Enter number of rooms">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+
+            <tr>
+                <th colspan="2" align="left">Preferences:</th>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="mode">Meal Preference:</label></li>
+                </td>
+                <td><input type="radio" name="meal" id="v">
+                    <label for="v">Veg</label>
+                    <input type="radio" name="meal" id="n">
+                    <label for="n">Non-Veg</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li><label for="act">Activities:</label></li>
+                </td>
+                <td><input type="checkbox" name="act" id="ss">
+                    <label for="ss">Sight-Seeing</label>
+                    <input type="checkbox" name="act" id="ad">
+                    <label for="ad">Adventure</label><br>
+                    <input type="checkbox" name="act" id="be">
+                    <label for="be">Beach</label>
+                    <input type="checkbox" name="act" id="sh">
+                    <label for="sh">Shopping</label>
+                </td>
+
+            <tr>
+                <td>
+                    <li><label for="bud">Budget Range:</label></li>
+                </td>
+                <td><select name="bud" style="width: 207px;">
+                        <option value="" selected disabled hidden>Select Budget Range</option>
+                        <option>2K-5K</option>
+                        <option>5K-10K</option>
+                        <option>10K-15K</option>
+                        <option>15K-20K</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td><button>Book Vacation</button></td>
+                <td align="right"><button>Reset</button></td>
+            </tr>
+        </table>
+    </fieldset>
+</body>
+</html>
