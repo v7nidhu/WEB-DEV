@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>External Font Example</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&family=Lavishly+Yours&display=swap"
+        rel="stylesheet">
+    <style>
+        .p1 {
+            font-family: 'Chelsea Market', cursive;
+            font-size: 20px;
+            font-variant: normal;
+        }
+        .p2 {
+            font-family: 'Lavishly Yours', cursive;
+            font-size: 40px;
+        }   
+    </style>
+</head>
+
+<body>
+    <div class="p1">
+        <h1>External Font Example</h1>
+        This is an example of using an external font from Google Fonts. The font used is "Chelsea Market".
+        <hr>
+        First we need to include the link to the Google Fonts stylesheet in the head of our HTML document. This is done
+        using the
+        <link> tag, where we specify the URL of the font we want to use. In this case, we are using "Chelsea Market".
+        <hr>
+        After including the link, we can then apply the font-family property in our CSS to the desired element, which in
+        this case is a div with the class "p1". By setting font-family to 'Chelsea Market', cursive, we ensure that if
+        for some reason the "Chelsea Market" font cannot be loaded, the browser will fall back to a generic cursive
+        font.
+    </div> <hr>
+    <div class="p2">
+        <h1>External Fonts Example</h1>
+        This is an example of using multiple external fonts from Google Fonts. The fonts used are "Chelsea Market" and
+        "Lavishly Yours".
+        <hr>
+        Similar to the previous example, we include the links to the Google Fonts stylesheets for both fonts in the head
+        of our HTML document. We can then apply these fonts to different elements in our CSS by specifying the font-family
+        property with the respective font names. In this case, we can use "Chelsea Market" for one element and "Lavishly Yours" for another element to create a visually appealing design. <hr>
+    </div>
+
+</body>
+</html>
