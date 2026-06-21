@@ -1,74 +1,95 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Display</title>
     <style>
-        .box{
-            display: block;
-            width: 80%;
+        * {
             margin: 0;
+            padding: 0;
         }
-        span{
+        div {
+            text-align: center;
+        }
+        .box1 {
             display: inline;
-            /* width: 200px; no effect*/
-            /* height: 50px; no effect*/
-            /* margin-top: auto; no effect */
-            margin-left:auto;
-            margin-right: auto;
+            margin-top: 34px;
+            /*NO EFFECT*/
+            margin-bottom: 34px;
+            /*NO EFFECT*/
+            margin-left: 5px;
+            margin-right: 5px;
+
+            padding-top: 34px;
+            /*NO EFFECT*/
+            padding-bottom: 1px;
+            padding-left: 12px;
+            padding-right: 1px;
+
+            width: 431px;
+            /*NO EFFECT*/
+            height: 1134px;
+            /*NO EFFECT*/
+            background-color: aqua;
         }
-        .abc{
+
+        .box2 {
+            display: inline;
+            width: 431px;
+            /*NO EFFECT*/
+            height: 3004px;
+            /*NO EFFECT*/
+            background-color: lightgreen;
+        }
+
+        .box3 {
+            display: block;
+            background-color: hotpink;
+            margin: 7px;
+            padding: 5px;
+            width: 150px;
+            height: 350px;
+        }
+
+        .box4 {
             display: inline-block;
-            width: 140px;
-            height: 50px;
-            padding: 8px,4px;
+            /* display: none; /* to remove the element */
+            /* visibility: hidden; /* to hide the element */
+            background-color: rgb(255, 253, 139);
+            margin: 7px;
+            padding: 5px;
+            width: 400px;
+            height: 150px;
+        }
+        .box5{
+            display: inline-block;
+            background-color: rgb(155, 93, 255);
+            margin: 7px;
+            padding: 5px;
+            width: 400px;
+            height: 150px;
         }
     </style>
 </head>
+
 <body>
-    <h1>Display property</h1>
-    <ul>
-        <li>Block</li>
-        <li>Inline</li>
-        <li>Inline Block</li>
-    </ul>
-    <h2>What is display</h2>
-    <ul>
-        <li>element generates block/inline box</li>
-        <li>starts on newline/flow with text</li>
-        width,height,margin and layout
-    </ul>
-    <div class="box">
-    <h2>Block</h2>
-    <ul>
-        <li>takes full available width</li>
-        <li>starts own new line</li>
-        <li>respects al model props</li>
-        <li>ex: div,p,h1-h6,section</li>
-    </ul>
+    <div class="box1"><b>This is Inline Element:</b>Lorem,gyshu iste!</div>
+    <div class="box2"><b>This is Inline Element</b> Lorem ipsum dolor,</div>
+    <div class="box3">
+        <h2>This is Block Element</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui maiores incidunt
+        aperiam fugit aliquam nobis possimus natus saepe voluptatem veritatis dignissimos, repudiandae veniam illum at
+        vitae optio. Neque voluptate accusamus voluptatum ducimus doloribus eaque.,
     </div>
-    <h2>Inline</h2>
-    <ul>
-        <li>Sticks to content width only</li>
-        <li>flows within surronding text</li>
-        <li>ignores width,height,top/bottom margin,padding</li>
-        <li>ex: span,a,strong,em</li>
-    </ul>
-    <div class="abc">
-    <h2>Inline-Block</h2>
-    <ul>
-        <li>flows inline like text</li>
-        <li>but respects with width and height</li>
-        <li>top/bottom margin,padding</li>
-        <li>ex: span</li>
-    </ul>
-    <h2>divison block</h2>
-    <ul>
-        <li>flows in a division</li>
-        <li>but respects with width and height</li>
-        <li>top/bottom margin,padding</li>
-        <li>ex: span</li>
-    </ul>
+    <div class="box4">
+        <h2>This is Inline-Block Element</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui maiores
+        incidunt aperiam fugit aliquam nobis possimus natus saepe voluptatem veritatis dignissimos, repudiandae veniam
+        illum at vitae optio. Neque voluptate accusamus voluptatum ducimus doloribus eaque.,
     </div>
-    
+    <div class="box5">
+        <h2>This is Inline-Block Element</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui maiores incidunt
+        aperiam fugit aliquam nobis possimus natus saepe voluptatem veritatis dignissimos, repudiandae veniam illum at
+        vitae optio. Neque voluptate accusamus voluptatum ducimus doloribus eaque.,
+    </div>
 </body>
+
 </html>
