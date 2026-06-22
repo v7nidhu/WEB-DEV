@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lengths</title>
+    <style>
+        .container{
+            background-color: rgb(255, 171, 223);    
+            font-size:12px;
+        }
+        .box{
+            background-color: rgb(110, 241, 160);
+            /* font-size:12px; */
+            font-size:3em;
+            /* triple 
+            of parent's font size=36px */
+        }
+        .box2{
+            background-color: lightblue;
+            font-size: 3rem;
+            /* triple 
+            of root html font size=48px */
+        }
+        .box3{
+            background-color: lightcoral;
+            font-size: 3vw; /* 3% of viewport width */
+            width: 50vw;
+            height: 50vh;
+            /* 50% of viewport width and 50% of viewport height */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>
+            This is a paragraph with some text in container with font size 12px. It is the parent container of box and box2.
+        </p>
+        <div class="box">
+        <p>
+            This is a paragraph with some text in box with font size 3em. It is triple of its parent container's font size. So, it is 36px because container's font size is 12px. 
+        </p>
+        </div>
+        <div class="box2">
+        <p>
+            This is a paragraph with some text in box with font size 3rem. It is triple of the root html element's font size. So, it is 48px because the root html element's font size is 16px.
+        </p>
+        </div>
+        <div class="box3">
+        <p>
+            Here, the font size is 3vw which is 3% of the viewport width. The width of the box is 50vw which is 50% of the viewport width and the height of the box is 50vh which is 50% of the viewport height.
+        </p>
+        </div>
+    </div>
+
+</body>
+</html>

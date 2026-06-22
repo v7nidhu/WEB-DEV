@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScamGuard AI – Fraud Detection Assistant</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    :root {
+      --bg-dark: #050816;
+      --primary: #4F46E5;
+      --secondary: #7C3AED;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Utility Classes */
+    .glass-nav {
+      background: rgba(5, 8, 22, 0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .glass-card:hover {
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+      transform: translateY(-5px);
+      transition: all 0.3s ease;
+    }
+
+    .text-gradient {
+      background: linear-gradient(to right, #4F46E5, #7C3AED, #4F46E5);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShine 4s linear infinite;
+    }
+
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    /* Animations */
+    @keyframes textShine {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-float-delayed {
+      animation: float 6s ease-in-out 3s infinite;
+    }
+
+    .blob {
+      position: absolute;
+      filter: blur(90px);
+      z-index: -1;
+      opacity: 0.4;
+    }
+
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* File Upload Area */
+    .upload-area {
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover,
+    .upload-area.dragover {
+      border-color: var(--primary);
+      background: rgba(79, 70, 229, 0.05);
+    }
+
+    /* Typing cursor */
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+
+  <!-- Background Glows -->
+  <div class="blob bg-indigo-600 w-[500px] h-[500px] rounded-full top-[-100px] left-[-100px]"></div>
+  <div class="blob bg-violet-600 w-[400px] h-[400px] rounded-full bottom-[10%] right-[-50px]"></div>
+  <div class="blob bg-blue-600 w-[300px] h-[300px] rounded-full top-[40%] left-[20%] opacity-20"></div>
+
+  <!-- Navbar -->
+  <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <i class='bx bx-shield-quarter text-4xl text-indigo-500'></i>
+          <span class="font-poppins font-bold text-2xl tracking-tight">ScamGuard <span
+              class="text-gradient">AI</span></span>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="#home" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Home</a>
+          <a href="#features" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Features</a>
+          <a href="#how-it-works" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">How It
+            Works</a>
+          <a href="#demo" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Demo</a>
+          <a href="#testimonials"
+            class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Testimonials</a>
+          <a href="#faq" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">FAQ</a>
+        </div>
+
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-btn" class="text-slate-300 hover:text-white">
+            <i class='bx bx-menu text-3xl'></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+      class="hidden md:hidden bg-[#050816]/95 backdrop-blur-xl border-t border-white/10 mt-4 absolute w-full left-0">
+      <div class="px-4 pt-2 pb-6 space-y-1 flex flex-col">
+        <a href="#home"
+          class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-md">Home</a>
+        <a href="#features"
+          class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-md">Features</a>
+        <a href="#demo"
+          class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-md">Demo</a>
+        <a href="#faq"
+          class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-md">FAQ</a>
+        <div class="mt-4 pt-4 border-t border-white/10 flex flex-col space-y-2">
+          <a href="#"
+            class="block w-full text-center px-3 py-2 text-base font-medium text-slate-300 hover:text-white">Sign In</a>
+          <a href="#demo" class="block w-full text-center bg-indigo-600 text-white px-3 py-2 rounded-md font-medium">Try
+            Free</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+        <!-- Left Content -->
+        <div class="text-center lg:text-left reveal active">
+          <div
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-indigo-500/30 text-indigo-300 text-sm font-medium mb-6">
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            AI-Powered Fraud Prevention Engine v2.0
+          </div>
+          <h1 class="text-5xl lg:text-7xl font-bold font-poppins leading-tight mb-6">
+            Detect Scams Before They <br class="hidden lg:block" />
+            <span class="text-gradient">Steal Your Money</span>
+          </h1>
+          <p class="text-lg lg:text-xl text-slate-400 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Upload suspicious screenshots, emails, SMS messages, or job offers. ScamGuard AI instantly analyzes them and
+            explains the risks in simple language.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12">
+            <a href="#demo"
+              class="w-full sm:w-auto bg-gradient-primary hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] text-white px-8 py-4 rounded-full font-semibold text-lg transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+              <i class='bx bx-scan'></i> Analyze Scam Now
+            </a>
+            <a href="#how-it-works"
+              class="w-full sm:w-auto glass-card hover:bg-white/10 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center justify-center gap-2">
+              <i class='bx bx-play-circle text-xl'></i> Watch Demo
+            </a>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
+            <div>
+              <h3 class="text-3xl font-bold font-poppins text-white mb-1 counter" data-target="50000">0</h3>
+              <p class="text-sm text-slate-400">Scams Detected</p>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold font-poppins text-white mb-1"><span class="counter"
+                  data-target="98">0</span>%</h3>
+              <p class="text-sm text-slate-400">Accuracy Rate</p>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold font-poppins text-white mb-1">₹<span class="counter"
+                  data-target="10">0</span>Cr+</h3>
+              <p class="text-sm text-slate-400">Potential Savings</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Mockup -->
+        <div class="relative lg:ml-10 reveal active delay-200">
+          <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-3xl blur-2xl">
+          </div>
+
+          <div
+            class="relative glass-card rounded-3xl p-6 border border-white/10 animate-float bg-[#0f172a]/80 backdrop-blur-xl">
+            <!-- Mac window dots -->
+            <div class="flex gap-2 mb-6">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+
+            <!-- Mockup Content -->
+            <div class="space-y-6">
+              <!-- Image analyzing -->
+              <div class="relative h-48 rounded-xl overflow-hidden group">
+                <img
+                  src="https://images.unsplash.com/photo-1555421689-491a97ff2040?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Suspicious message" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-indigo-900/40"></div>
+                <!-- Scanning line -->
+                <div
+                  class="absolute top-0 left-0 w-full h-1 bg-indigo-400 shadow-[0_0_15px_#818cf8] animate-[scan_2s_ease-in-out_infinite]">
+                </div>
+
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="glass-card px-4 py-2 rounded-lg flex items-center gap-2">
+                    <i class='bx bx-loader-alt animate-spin text-indigo-400'></i>
+                    <span class="text-sm font-medium">AI Analyzing...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Results -->
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                  <p class="text-sm text-slate-400 mb-1">Risk Score</p>
+                  <div class="flex items-end gap-2">
+                    <span class="text-3xl font-bold text-red-500 font-poppins">87%</span>
+                    <i class='bx bx-trending-up text-red-500 mb-1'></i>
+                  </div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                  <p class="text-sm text-slate-400 mb-1">Status</p>
+                  <div
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-500/20 text-red-400 text-sm font-semibold border border-red-500/30">
+                    <i class='bx bx-error-circle'></i> HIGH RISK
+                  </div>
+                </div>
+              </div>
+
+              <!-- Threats -->
+              <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                <p class="text-sm text-slate-400 mb-3">Detected Threats</p>
+                <ul class="space-y-2">
+                  <li class="flex items-center gap-2 text-sm">
+                    <i class='bx bxs-x-circle text-red-500'></i> Fake Job Offer Pattern
+                  </li>
+                  <li class="flex items-center gap-2 text-sm">
+                    <i class='bx bxs-x-circle text-red-500'></i> Suspicious Bit.ly Link
+                  </li>
+                  <li class="flex items-center gap-2 text-sm">
+                    <i class='bx bxs-x-circle text-red-500'></i> Urgent Payment Request
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands/Trusted by -->
+  <section class="border-y border-white/5 bg-white/[0.02] py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm text-slate-400 font-medium mb-6 uppercase tracking-wider">Protecting users across platforms</p>
+      <div
+        class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+        <i class='bx bxl-whatsapp text-4xl hover:text-green-500 transition-colors'></i>
+        <i class='bx bxl-telegram text-4xl hover:text-blue-400 transition-colors'></i>
+        <i class='bx bx-envelope text-4xl hover:text-red-400 transition-colors'></i>
+        <i class='bx bxl-linkedin-square text-4xl hover:text-blue-600 transition-colors'></i>
+        <i class='bx bx-mobile text-4xl hover:text-slate-200 transition-colors'></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold font-poppins mb-6">Comprehensive <span
+            class="text-gradient">Protection</span></h2>
+        <p class="text-slate-400 text-lg">Our AI engine recognizes patterns across multiple channels, keeping you safe
+          wherever scammers try to reach you.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="glass-card p-8 rounded-2xl reveal">
+          <div
+            class="w-14 h-14 rounded-xl bg-indigo-500/20 flex items-center justify-center mb-6 border border-indigo-500/30">
+            <i class='bx bx-image text-2xl text-indigo-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">Screenshot Analysis</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Upload screenshots of WhatsApp chats, Instagram DMs, or
+            payment apps. Our OCR reads the text and spots manipulation.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="glass-card p-8 rounded-2xl reveal delay-100">
+          <div
+            class="w-14 h-14 rounded-xl bg-violet-500/20 flex items-center justify-center mb-6 border border-violet-500/30">
+            <i class='bx bx-envelope text-2xl text-violet-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">Email Scam Detection</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Paste suspicious emails. We analyze sender domains, spoofing
+            attempts, hidden links, and urgency tactics.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="glass-card p-8 rounded-2xl reveal delay-200">
+          <div
+            class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center mb-6 border border-blue-500/30">
+            <i class='bx bx-message-rounded-dots text-2xl text-blue-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">SMS Fraud Scanner</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Check SMS messages for fake bank alerts, delivery scams, and
+            malicious shortened URLs targeting mobile users.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="glass-card p-8 rounded-2xl reveal">
+          <div
+            class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center mb-6 border border-green-500/30">
+            <i class='bx bx-qr-scan text-2xl text-green-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">UPI & QR Scam Detection</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Analyze QR codes and payment requests. We identify "receive
+            money" scams and fake refund patterns.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="glass-card p-8 rounded-2xl reveal delay-100">
+          <div
+            class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center mb-6 border border-yellow-500/30">
+            <i class='bx bx-link text-2xl text-yellow-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">Phishing Link Checker</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Paste any URL. Our engine checks against global threat
+            databases and analyzes domain age and SSL certificates.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="glass-card p-8 rounded-2xl reveal delay-200">
+          <div
+            class="w-14 h-14 rounded-xl bg-red-500/20 flex items-center justify-center mb-6 border border-red-500/30">
+            <i class='bx bx-support text-2xl text-red-400'></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3 font-poppins">Fake Customer Care</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Verify phone numbers against known scam call center
+            databases before you dial for "support".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-24 bg-black/40 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold font-poppins mb-6">How It <span class="text-gradient">Works</span>
+        </h2>
+        <p class="text-slate-400 text-lg">Three simple steps to secure your digital life.</p>
+      </div>
+
+      <div class="relative">
+        <!-- Connecting Line -->
+        <div
+          class="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-indigo-500/0 via-indigo-500/50 to-indigo-500/0 -translate-y-1/2 z-0">
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-10 relative z-10">
+          <!-- Step 1 -->
+          <div class="text-center reveal">
+            <div
+              class="w-20 h-20 mx-auto bg-[#050816] glass-card rounded-full flex items-center justify-center mb-6 border-2 border-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] relative">
+              <span
+                class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+              <i class='bx bx-cloud-upload text-3xl text-white'></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 font-poppins">Upload or Paste</h3>
+            <p class="text-slate-400 text-sm px-4">Provide the suspicious screenshot, text message, email content, or
+              link.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="text-center reveal delay-100">
+            <div
+              class="w-20 h-20 mx-auto bg-[#050816] glass-card rounded-full flex items-center justify-center mb-6 border-2 border-violet-500 shadow-[0_0_20px_rgba(124,58,237,0.3)] relative">
+              <span
+                class="absolute -top-2 -right-2 w-8 h-8 bg-violet-600 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+              <i class='bx bx-brain text-3xl text-white'></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 font-poppins">AI Analysis</h3>
+            <p class="text-slate-400 text-sm px-4">Our proprietary ML models scan for psychological triggers, hidden
+              malware, and fraud patterns.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="text-center reveal delay-200">
+            <div
+              class="w-20 h-20 mx-auto bg-[#050816] glass-card rounded-full flex items-center justify-center mb-6 border-2 border-green-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] relative">
+              <span
+                class="absolute -top-2 -right-2 w-8 h-8 bg-green-600 rounded-full flex items-center justify-center font-bold text-sm">3</span>
+              <i class='bx bx-shield-check text-3xl text-white'></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 font-poppins">Get Risk Report</h3>
+            <p class="text-slate-400 text-sm px-4">Instantly receive a clear risk score, detailed explanation, and
+              actionable next steps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE DEMO SECTION (Core Functionality) -->
+  <section id="demo" class="py-24 relative overflow-hidden">
+    <!-- Background elements -->
+    <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[120px] -z-10"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <div
+          class="inline-block px-4 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold mb-4">
+          Live Interactive Demo
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold font-poppins mb-6">Test The <span class="text-gradient">AI
+            Scanner</span></h2>
+        <p class="text-slate-400 text-lg">Paste a suspicious text or simulate an upload to see ScamGuard in action.</p>
+      </div>
+
+      <div class="glass-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl reveal">
+
+        <!-- Demo Header Tabs -->
+        <div class="flex border-b border-white/10 bg-white/[0.02]">
+          <button
+            class="flex-1 py-4 text-sm font-medium text-white border-b-2 border-indigo-500 bg-white/5 transition-colors">
+            <i class='bx bx-text mr-2'></i> Paste Text / Link
+          </button>
+          <button
+            class="flex-1 py-4 text-sm font-medium text-slate-400 hover:text-white transition-colors cursor-not-allowed opacity-50"
+            title="Coming soon in this demo">
+            <i class='bx bx-image mr-2'></i> Upload Image
+          </button>
+        </div>
+
+        <div class="p-6 md:p-8">
+          <!-- INPUT AREA -->
+          <div id="demo-input-area" class="space-y-6 block">
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">Suspicious Message, Email, or Link</label>
+              <textarea id="demo-textarea" rows="5"
+                class="w-full bg-[#050816]/50 border border-white/10 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                placeholder="E.g., 'Dear Customer, your SBI account will be blocked today. Click here to update PAN: http://bit.ly/sbi-kyc-update Urgent!'"></textarea>
+
+              <!-- Preset Buttons -->
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs text-slate-500 py-1">Try examples:</span>
+                <button onclick="fillExample(1)"
+                  class="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded-md px-3 py-1 transition-colors">Bank
+                  KYC Scam</button>
+                <button onclick="fillExample(2)"
+                  class="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded-md px-3 py-1 transition-colors">Fake
+                  Job Offer</button>
+              </div>
+            </div>
+
+            <!-- Drag Drop Area Simulation -->
+            <div class="upload-area rounded-xl p-8 text-center cursor-pointer bg-[#050816]/30">
+              <i class='bx bx-cloud-upload text-4xl text-slate-400 mb-2'></i>
+              <p class="text-sm text-slate-300 font-medium">Or drag and drop a screenshot here</p>
+              <p class="text-xs text-slate-500 mt-1">PNG, JPG up to 5MB</p>
+            </div>
+
+            <button id="btn-analyze"
+              class="w-full bg-gradient-primary hover:shadow-[0_0_20px_rgba(79,70,229,0.4)] text-white py-4 rounded-xl font-bold text-lg transition-all transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+              <i class='bx bx-radar'></i> Run Security Analysis
+            </button>
+          </div>
+
+          <!-- LOADING AREA -->
+          <div id="demo-loading-area" class="hidden py-12 flex-col items-center justify-center text-center">
+            <div class="relative w-24 h-24 mb-6">
+              <div class="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
+              <div class="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+              </div>
+              <i
+                class='bx bx-shield-quarter absolute inset-0 flex items-center justify-center text-3xl text-indigo-400 animate-pulse'></i>
+            </div>
+            <h3 class="text-xl font-bold font-poppins mb-2">AI is Analyzing</h3>
+            <p id="loading-text" class="text-slate-400 text-sm h-5 typing-cursor">Initializing security protocols...</p>
+
+            <!-- Progress Bar -->
+            <div
+              class="w-full max-w-md mx-auto mt-6 bg-white/5 rounded-full h-2 border border-white/10 overflow-hidden">
+              <div id="progress-bar"
+                class="bg-gradient-to-r from-indigo-500 to-violet-500 h-2 rounded-full w-0 transition-all duration-100 ease-out">
+              </div>
+            </div>
+          </div>
+
+          <!-- RESULT AREA -->
+          <div id="demo-result-area" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <h3 class="text-lg font-semibold font-poppins flex items-center gap-2">
+                <i class='bx bx-file'></i> Analysis Report
+              </h3>
+              <button onclick="resetDemo()"
+                class="text-sm text-slate-400 hover:text-white flex items-center gap-1 transition-colors">
+                <i class='bx bx-reset'></i> Scan Another
+              </button>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Score Card -->
+              <div
+                class="md:col-span-1 bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-center flex flex-col justify-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
+                <h4 class="text-slate-300 text-sm font-medium mb-2">Risk Score</h4>
+                <div class="text-5xl font-bold font-poppins text-red-500 mb-2">92%</div>
+                <div
+                  class="inline-flex items-center justify-center gap-1 px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-sm font-bold mx-auto">
+                  <i class='bx bx-error'></i> HIGH RISK
+                </div>
+              </div>
+
+              <!-- Details Card -->
+              <div class="md:col-span-2 space-y-4">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+                  <h4 class="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Detected Issues</h4>
+                  <ul class="space-y-3">
+                    <li class="flex gap-3">
+                      <i class='bx bxs-x-circle text-red-500 mt-0.5 text-lg'></i>
+                      <div>
+                        <p class="text-sm text-white font-medium">Urgent psychological trigger</p>
+                        <p class="text-xs text-slate-400">Uses words like "blocked today", "Urgent!" to cause panic.</p>
+                      </div>
+                    </li>
+                    <li class="flex gap-3">
+                      <i class='bx bxs-x-circle text-red-500 mt-0.5 text-lg'></i>
+                      <div>
+                        <p class="text-sm text-white font-medium">Suspicious shortened URL</p>
+                        <p class="text-xs text-slate-400">Contains 'bit.ly' link masking the true destination.</p>
+                      </div>
+                    </li>
+                    <li class="flex gap-3">
+                      <i class='bx bxs-x-circle text-red-500 mt-0.5 text-lg'></i>
+                      <div>
+                        <p class="text-sm text-white font-medium">Impersonation Attempt</p>
+                        <p class="text-xs text-slate-400">Claims to be 'SBI' but lacks official communication channels.
+                        </p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5 mt-4">
+              <h4 class="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider flex items-center gap-2">
+                <i class='bx bx-check-shield text-green-400'></i> Recommended Actions
+              </h4>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <div class="bg-black/30 rounded-lg p-3 border border-white/5 flex items-start gap-2">
+                  <i class='bx bx-block text-red-400 mt-0.5'></i>
+                  <span class="text-sm text-slate-300"><strong>Do NOT</strong> click any links provided in the
+                    message.</span>
+                </div>
+                <div class="bg-black/30 rounded-lg p-3 border border-white/5 flex items-start gap-2">
+                  <i class='bx bx-phone-call text-green-400 mt-0.5'></i>
+                  <span class="text-sm text-slate-300"><strong>Verify</strong> by calling your bank's official number
+                    directly.</span>
+                </div>
+                <div class="bg-black/30 rounded-lg p-3 border border-white/5 flex items-start gap-2">
+                  <i class='bx bx-trash text-slate-400 mt-0.5'></i>
+                  <span class="text-sm text-slate-300"><strong>Delete</strong> the message and block the sender.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 flex gap-3">
+              <button
+                class="flex-1 bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-medium text-sm transition-colors border border-white/10 flex justify-center items-center gap-2">
+                <i class='bx bx-download'></i> Download Report
+              </button>
+              <button
+                class="flex-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/30 py-3 rounded-xl font-medium text-sm transition-colors flex justify-center items-center gap-2">
+                <i class='bx bx-share-alt'></i> Share Warning
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Threat Categories -->
+  <section class="py-20 border-t border-white/5 bg-gradient-to-b from-transparent to-[#050816]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl font-bold font-poppins mb-4">Recognize Common <span class="text-danger">Threats</span></h2>
+        <p class="text-slate-400">Our database is updated daily with the latest scam methodologies.</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Threat Cards -->
+        <div
+          class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:bg-white/[0.05] transition-colors reveal">
+          <i class='bx bx-briefcase text-3xl text-blue-400 mb-3'></i>
+          <h4 class="font-semibold text-white mb-1">Job Scams</h4>
+          <p class="text-xs text-slate-400">Requests for "processing fees" or fake task-based jobs.</p>
+        </div>
+        <div
+          class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:bg-white/[0.05] transition-colors reveal delay-100">
+          <i class='bx bx-rupee text-3xl text-green-400 mb-3'></i>
+          <h4 class="font-semibold text-white mb-1">UPI Fraud</h4>
+          <p class="text-xs text-slate-400">"Enter PIN to receive money" or fake refund links.</p>
+        </div>
+        <div
+          class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:bg-white/[0.05] transition-colors reveal delay-200">
+          <i class='bx bx-lock-open-alt text-3xl text-yellow-400 mb-3'></i>
+          <h4 class="font-semibold text-white mb-1">OTP Theft</h4>
+          <p class="text-xs text-slate-400">Impersonators asking for OTP to block fake transactions.</p>
+        </div>
+        <div
+          class="bg-white/[0.02] border border-white/5 rounded-xl p-5 hover:bg-white/[0.05] transition-colors reveal delay-300">
+          <i class='bx bx-line-chart-down text-3xl text-red-400 mb-3'></i>
+          <h4 class="font-semibold text-white mb-1">Investment Scams</h4>
+          <p class="text-xs text-slate-400">Guaranteed 200% returns in crypto or stock tips via Telegram.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-3xl md:text-5xl font-bold font-poppins mb-6">Saved by <span
+            class="text-gradient">ScamGuard</span></h2>
+        <p class="text-slate-400 text-lg">Real stories from people who avoided financial loss.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="glass-card p-6 rounded-2xl reveal">
+          <div class="flex text-yellow-400 mb-4 text-sm">
+            <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i
+              class='bx bxs-star'></i><i class='bx bxs-star'></i>
+          </div>
+          <p class="text-slate-300 text-sm mb-6 leading-relaxed">"I received a message about my electricity bill being
+            overdue and my power getting cut. The link looked real. ScamGuard immediately flagged it as a known phishing
+            campaign. Saved me!"</p>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-300">
+              A</div>
+            <div>
+              <h5 class="text-sm font-semibold text-white">Aarav Sharma</h5>
+              <p class="text-xs text-slate-400">Saved ₹12,000</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card p-6 rounded-2xl reveal delay-100">
+          <div class="flex text-yellow-400 mb-4 text-sm">
+            <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i
+              class='bx bxs-star'></i><i class='bx bxs-star'></i>
+          </div>
+          <p class="text-slate-300 text-sm mb-6 leading-relaxed">"Was looking for a WFH job and got an offer requiring a
+            ₹2500 'training kit' fee via UPI. Uploaded the screenshot here and realized it's a massive scam network.
+            Brilliant tool."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-300">
+              P</div>
+            <div>
+              <h5 class="text-sm font-semibold text-white">Priya Verma</h5>
+              <p class="text-xs text-slate-400">Avoided Job Scam</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card p-6 rounded-2xl reveal delay-200">
+          <div class="flex text-yellow-400 mb-4 text-sm">
+            <i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i
+              class='bx bxs-star'></i><i class='bx bxs-star'></i>
+          </div>
+          <p class="text-slate-300 text-sm mb-6 leading-relaxed">"Got a call from 'customer care' asking me to download
+            an APK file to process my airline refund. I checked the number on ScamGuard and it flashed red instantly."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-300">
+              R</div>
+            <div>
+              <h5 class="text-sm font-semibold text-white">Rahul Gupta</h5>
+              <p class="text-xs text-slate-400">Prevented Malware</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="py-24 bg-[#050816]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="space-y-4 reveal">
+        <!-- FAQ Item 1 -->
+        <div class="glass-card rounded-xl overflow-hidden faq-item">
+          <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
+            onclick="toggleFaq(this)">
+            <span class="font-medium text-white">How accurate is ScamGuard AI?</span>
+            <i class='bx bx-chevron-down text-xl text-slate-400 transition-transform'></i>
+          </button>
+          <div
+            class="px-6 pb-4 text-sm text-slate-400 hidden max-h-0 overflow-hidden transition-all duration-300 content">
+            Our AI models currently maintain a 98% detection accuracy. They are trained on millions of data points
+            including known phishing URLs, malicious IP addresses, and linguistic patterns commonly used in social
+            engineering.
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="glass-card rounded-xl overflow-hidden faq-item">
+          <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
+            onclick="toggleFaq(this)">
+            <span class="font-medium text-white">Is my uploaded data safe?</span>
+            <i class='bx bx-chevron-down text-xl text-slate-400 transition-transform'></i>
+          </button>
+          <div
+            class="px-6 pb-4 text-sm text-slate-400 hidden max-h-0 overflow-hidden transition-all duration-300 content">
+            Yes. We take privacy seriously. Images and text uploaded for analysis are processed in memory and
+            immediately deleted. We do not store personal messages or screenshots on our servers.
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="glass-card rounded-xl overflow-hidden faq-item">
+          <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
+            onclick="toggleFaq(this)">
+            <span class="font-medium text-white">Can it detect WhatsApp scams?</span>
+            <i class='bx bx-chevron-down text-xl text-slate-400 transition-transform'></i>
+          </button>
+          <div
+            class="px-6 pb-4 text-sm text-slate-400 hidden max-h-0 overflow-hidden transition-all duration-300 content">
+            Yes, simply take a screenshot of the suspicious WhatsApp message or copy the text/link and paste it into our
+            analyzer. It works perfectly for WhatsApp, Telegram, and SMS.
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="glass-card rounded-xl overflow-hidden faq-item">
+          <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
+            onclick="toggleFaq(this)">
+            <span class="font-medium text-white">Is ScamGuard free to use?</span>
+            <i class='bx bx-chevron-down text-xl text-slate-400 transition-transform'></i>
+          </button>
+          <div
+            class="px-6 pb-4 text-sm text-slate-400 hidden max-h-0 overflow-hidden transition-all duration-300 content">
+            Basic analysis via our web interface is completely free for individual users. We offer premium APIs and
+            enterprise solutions for businesses wanting to integrate our detection engine.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call To Action -->
+  <section class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 blur-3xl z-0"></div>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div
+        class="glass-card rounded-3xl p-10 md:p-16 text-center border-t border-white/20 bg-gradient-to-b from-white/10 to-transparent">
+        <h2 class="text-3xl md:text-5xl font-bold font-poppins mb-6 text-white">Protect Yourself From <br
+            class="hidden sm:block" />Online Fraud Today</h2>
+        <p class="text-lg text-indigo-200 mb-10 max-w-2xl mx-auto">Don't wait until it's too late. Use ScamGuard AI to
+          verify before you trust, click, or pay.</p>
+        <a href="#demo"
+          class="inline-flex items-center gap-2 bg-white text-indigo-900 hover:bg-slate-100 px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+          Start Free Analysis <i class='bx bx-right-arrow-alt text-xl'></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#02040a] border-t border-white/5 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div class="col-span-2 md:col-span-1">
+          <div class="flex items-center gap-2 mb-4">
+            <i class='bx bx-shield-quarter text-3xl text-indigo-500'></i>
+            <span class="font-poppins font-bold text-xl tracking-tight">ScamGuard</span>
+          </div>
+          <p class="text-slate-500 text-sm mb-6">Empowering users with enterprise-grade AI to fight digital fraud and
+            social engineering.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-slate-400 hover:text-white transition-colors"><i
+                class='bx bxl-twitter text-xl'></i></a>
+            <a href="#" class="text-slate-400 hover:text-white transition-colors"><i
+                class='bx bxl-linkedin-square text-xl'></i></a>
+            <a href="#" class="text-slate-400 hover:text-white transition-colors"><i
+                class='bx bxl-github text-xl'></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Company</h4>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">About Us</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Careers</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Contact</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Press Kit</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Resources</h4>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Blog</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Security Tips</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Scam Database</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">API Docs</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-semibold mb-4">Legal</h4>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-indigo-400 transition-colors">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-slate-500 text-sm">© 2026 ScamGuard AI. All rights reserved.</p>
+        <div class="flex items-center gap-2 text-sm text-slate-500">
+          <span>Status:</span>
+          <span class="flex items-center gap-1 text-green-400"><span class="w-2 h-2 rounded-full bg-green-500"></span>
+            Systems Operational</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Navbar Scroll Effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('shadow-lg', 'border-b', 'border-white/10');
+      } else {
+        navbar.classList.remove('shadow-lg', 'border-b', 'border-white/10');
+      }
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Scroll Reveal Animation
+    function reveal() {
+      var reveals = document.querySelectorAll(".reveal");
+      for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 100;
+        if (elementTop < windowHeight - elementVisible) {
+          reveals[i].classList.add("active");
+        }
+      }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal(); // Trigger on load
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    let animated = false;
+
+    function animateCounters() {
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16); // 60fps
+
+        let current = 0;
+        const updateCounter = () => {
+          current += increment;
+          if (current < target) {
+            counter.innerText = Math.ceil(current).toLocaleString();
+            requestAnimationFrame(updateCounter);
+          } else {
+            counter.innerText = target.toLocaleString();
+          }
+        };
+        updateCounter();
+      });
+    }
+
+    // Trigger counter animation when stats are in view
+    window.addEventListener('scroll', () => {
+      if (animated) return;
+      const statsSection = document.querySelector('.counter').parentElement.parentElement;
+      if (statsSection.getBoundingClientRect().top < window.innerHeight) {
+        animateCounters();
+        animated = true;
+      }
+    });
+
+    // FAQ Accordion
+    function toggleFaq(btn) {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector('i');
+      const parent = btn.parentElement;
+
+      // Close all others
+      document.querySelectorAll('.faq-item .content').forEach(el => {
+        if (el !== content) {
+          el.classList.add('hidden');
+          el.style.maxHeight = null;
+          el.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
+          el.parentElement.classList.remove('border-indigo-500/30');
+        }
+      });
+
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.style.transform = 'rotate(180deg)';
+        parent.classList.add('border-indigo-500/30');
+      } else {
+        content.classList.add('hidden');
+        content.style.maxHeight = null;
+        icon.style.transform = 'rotate(0deg)';
+        parent.classList.remove('border-indigo-500/30');
+      }
+    }
+
+    // DEMO LOGIC
+    const demoInputArea = document.getElementById('demo-input-area');
+    const demoLoadingArea = document.getElementById('demo-loading-area');
+    const demoResultArea = document.getElementById('demo-result-area');
+    const btnAnalyze = document.getElementById('btn-analyze');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingText = document.getElementById('loading-text');
+    const textarea = document.getElementById('demo-textarea');
+
+    function fillExample(type) {
+      if (type === 1) {
+        textarea.value = "Dear Customer, your SBI account will be blocked today due to pending KYC. Click here to update PAN immediately: http://bit.ly/sbi-kyc-update Urgent!";
+      } else if (type === 2) {
+        textarea.value = "Congratulations! You have been selected for Data Entry Job at Amazon. Salary 45,000/month. Pay Rs.2500 refundable security deposit via UPI to start training today. Contact HR immediately.";
+      }
+    }
+
+    btnAnalyze.addEventListener('click', () => {
+      const text = textarea.value.trim();
+      if (!text) {
+        textarea.classList.add('border-red-500');
+        setTimeout(() => textarea.classList.remove('border-red-500'), 1000);
+        return;
+      }
+
+      // Start Loading
+      demoInputArea.style.display = 'none';
+      demoLoadingArea.classList.remove('hidden');
+      demoLoadingArea.classList.add('flex');
+
+      const stages = [
+        "Extracting text contents...",
+        "Running NLP models...",
+        "Checking URL reputation databases...",
+        "Analyzing psychological triggers...",
+        "Compiling final risk score..."
+      ];
+
+      let progress = 0;
+      let stageIndex = 0;
+
+      const interval = setInterval(() => {
+        progress += Math.random() * 5;
+        if (progress > 100) progress = 100;
+
+        progressBar.style.width = `${progress}%`;
+
+        // Update text based on progress
+        if (progress > (stageIndex + 1) * 20 && stageIndex < stages.length - 1) {
+          stageIndex++;
+          loadingText.innerText = stages[stageIndex];
+        }
+
+        if (progress === 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            demoLoadingArea.classList.add('hidden');
+            demoLoadingArea.classList.remove('flex');
+            demoResultArea.classList.remove('hidden');
+            // Scroll slightly to results
+            demoResultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 800);
+        }
+      }, 100);
+    });
+
+    function resetDemo() {
+      demoResultArea.classList.add('hidden');
+      demoInputArea.style.display = 'block';
+      progressBar.style.width = '0%';
+      loadingText.innerText = "Initializing security protocols...";
+      textarea.value = '';
+    }
+  </script>
+</body>
+
+</html>
